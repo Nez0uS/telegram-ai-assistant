@@ -13,19 +13,13 @@ class AIService:
         )
         self.model = MODEL_NAME
 
-    async def get_answer(self, text: str) -> str:
+    async def get_answer(self, messages: list[dict[str, str]]) -> str:
+        request_messages = [
+            {"role": "system", "content": PROMPT1}
+        ] + messages
 
         completion = await self.client.chat.completions.create(
-            messages=[
-                {
-                    "role": "system",
-                    "content": PROMPT1
-                },
-                {
-                    "role": "user",
-                    "content": text
-                }
-            ],
+            messages=request_messages,
             model=self.model,
         )
 
