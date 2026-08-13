@@ -1,3 +1,4 @@
 aiogram==3.22.0
 python-dotenv==1.1.1
 openai==1.109.1
+pytest==26.2.1
