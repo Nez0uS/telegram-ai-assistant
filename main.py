@@ -18,14 +18,17 @@ dp.include_router(chat_router)
 
 async def main():
     await database.connect()
+
     memory = MemoryService(database)
     memory_middleware = MemoryMiddleware(memory)
     chat_router.message.outer_middleware(memory_middleware)
 
-    print("Ассистент запущен")
+    try:
+        print("Ассистент запущен")
+        await dp.start_polling(bot)
 
-    await dp.start_polling(bot)
-    await database.close()
+    finally:
+        await database.close()
 
 
 if __name__ == "__main__":
