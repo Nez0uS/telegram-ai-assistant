@@ -1,7 +1,8 @@
-from .settings import BOT_TOKEN, OPENROUTER_API_KEY, MODEL_NAME
+from .settings import BOT_TOKEN, OPENROUTER_API_KEY, MODEL_NAME, DATABASE_URL
 
 __all__ = [
     "BOT_TOKEN",
     "OPENROUTER_API_KEY",
-    "MODEL_NAME"
+    "MODEL_NAME",
+    "DATABASE_URL"
 ]

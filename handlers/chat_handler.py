@@ -4,19 +4,19 @@ from openai import APIConnectionError, RateLimitError, APIStatusError
 
 from services import AIService, MemoryService
 
+
 ai_service = AIService()
 chat_router = Router()
-memory_service = MemoryService()
 
 @chat_router.message()
-async def chat_handler(message: Message):
+async def chat_handler(message: Message, memory: MemoryService):
     try:
         user_id = message.from_user.id
 
-        memory_service.add_message(user_id=user_id, role="user", content=message.text)
-        messages = memory_service.get_messages(user_id)
+        await memory.add_message(user_id=user_id, role="user", content=message.text)
+        messages = await memory.get_messages(user_id)
         answer = await ai_service.get_answer(messages)
-        memory_service.add_message(user_id=user_id, role="assistant", content=answer)
+        await memory.add_message(user_id=user_id, role="assistant", content=answer)
         await message.answer(
             answer
         )
