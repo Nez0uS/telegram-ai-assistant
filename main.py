@@ -3,7 +3,7 @@ import asyncio
 from aiogram import Bot, Dispatcher
 
 from database import Database
-from handlers import start_router, chat_router
+from handlers import start_router, chat_router, clear_router
 from config import BOT_TOKEN
 from services import MemoryService
 from middlewares import MemoryMiddleware
@@ -13,6 +13,7 @@ dp = Dispatcher()
 database = Database()
 
 dp.include_router(start_router)
+dp.include_router(clear_router)
 dp.include_router(chat_router)
 
 
@@ -21,7 +22,7 @@ async def main():
 
     memory = MemoryService(database)
     memory_middleware = MemoryMiddleware(memory)
-    chat_router.message.outer_middleware(memory_middleware)
+    dp.message.outer_middleware(memory_middleware)
 
     try:
         print("Ассистент запущен")

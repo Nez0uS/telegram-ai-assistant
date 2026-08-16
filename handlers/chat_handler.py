@@ -1,5 +1,6 @@
-from aiogram import Router
+from aiogram import F, Router
 from aiogram.types import Message
+from aiogram.filters import Command
 from openai import APIConnectionError, RateLimitError, APIStatusError
 
 from services import AIService, MemoryService
@@ -8,7 +9,7 @@ from services import AIService, MemoryService
 ai_service = AIService()
 chat_router = Router()
 
-@chat_router.message()
+@chat_router.message(F.text & ~(F.text.startswith("/")))
 async def chat_handler(message: Message, memory: MemoryService):
     try:
         user_id = message.from_user.id
