@@ -1,11 +1,11 @@
+import logging
 from aiogram import F, Router
 from aiogram.types import Message
-from aiogram.filters import Command
 from openai import APIConnectionError, RateLimitError, APIStatusError
 
 from services import AIService, MemoryService
 
-
+logger = logging.getLogger(__name__)
 ai_service = AIService()
 chat_router = Router()
 
@@ -22,32 +22,32 @@ async def chat_handler(message: Message, memory: MemoryService):
             answer
         )
 
-    except APIConnectionError as e:
-        print(e)
+    except APIConnectionError:
+        logger.error("Нет соединения с AI.")
         await message.answer(
             "Нет соединения с AI."
         )
 
-    except RateLimitError as e:
-        print(e)
+    except RateLimitError:
+        logger.warning("Слишком много запросов.")
         await message.answer(
             "Слишком много запросов."
         )
 
-    except APIStatusError as e:
-        print(e)
+    except APIStatusError:
+        logger.error("Произошла ошибка при загрузке ответа.")
         await message.answer(
             "Произошла ошибка при загрузке ответа."
         )
 
-    except ValueError as e:
-        print(e)
+    except ValueError:
+        logger.error("AI не смог сформировать ответ.")
         await message.answer(
             "AI не смог сформировать ответ."
         )
 
-    except Exception as e:
-        print(e)
+    except Exception:
+        logger.exception("Ошибка при обработке сообщения")
         await message.answer(
             "Произошла ошибка."
         )

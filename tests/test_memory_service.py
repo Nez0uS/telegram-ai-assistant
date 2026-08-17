@@ -4,12 +4,12 @@ from services import MemoryService
 
 
 @pytest.mark.anyio
-async def test_history_limit(database):
+async def test_history_limit(repository):
     user_id = 123
 
-    await database.clear_history(user_id)
+    await repository.clear_history(user_id)
 
-    memory_service = MemoryService(database)
+    memory_service = MemoryService(repository)
 
     for i in range(21):
         await memory_service.add_message(
@@ -26,11 +26,11 @@ async def test_history_limit(database):
 
 
 @pytest.mark.anyio
-async def test_users_have_separate_history(database):
-    await database.clear_history(1)
-    await database.clear_history(2)
+async def test_users_have_separate_history(repository):
+    await repository.clear_history(1)
+    await repository.clear_history(2)
 
-    memory_service = MemoryService(database)
+    memory_service = MemoryService(repository)
 
     await memory_service.add_message(1, "user", "Привет от первого")
     await memory_service.add_message(2, "user", "Привет от второго")
@@ -47,10 +47,10 @@ async def test_users_have_separate_history(database):
     ]
 
 @pytest.mark.anyio
-async def test_clear_history(database):
+async def test_clear_history(repository):
     user_id = 123
 
-    memory_service = MemoryService(database)
+    memory_service = MemoryService(repository)
 
     await memory_service.add_message(user_id, "user", "Привет")
     await memory_service.add_message(user_id, "assistant", "Здравствуйте!")
