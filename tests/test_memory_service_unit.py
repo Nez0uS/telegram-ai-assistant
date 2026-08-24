@@ -5,7 +5,7 @@ from services import MemoryService
 
 
 @pytest.mark.anyio
-async def test_add_message():
+async def test_memory_service_add_message():
     repository = Mock()
     repository.insert_message = AsyncMock()
 
@@ -24,7 +24,7 @@ async def test_add_message():
     )
 
 @pytest.mark.anyio
-async def test_get_messages():
+async def test_memory_service_get_messages():
     repository = Mock()
     repository.get_messages = AsyncMock(
         return_value=[
@@ -43,7 +43,7 @@ async def test_get_messages():
     ]
 
 @pytest.mark.anyio
-async def test_clear_history():
+async def test_memory_service_clear_history():
     repository = Mock()
     repository.clear_history = AsyncMock()
 
