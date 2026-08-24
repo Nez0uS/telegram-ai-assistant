@@ -30,10 +30,10 @@ class AIService:
             return content
 
         except RateLimitError as error:
-            raise AIRateLimitError("Ошибка лимита скорости.") from error
+            raise AIRateLimitError("Слишком много запросов.") from error
 
         except APIStatusError as error:
-            raise AIProviderError("Ошибка статуса.") from error
+            raise AIProviderError("Произошла ошибка при загрузке ответа.") from error
 
         except APIConnectionError as error:
             raise AIConnectionError("Ошибка подключения.") from error

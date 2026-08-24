@@ -21,4 +21,4 @@ async def test_ai_service_status_error():
     with pytest.raises(AIProviderError) as exc_info:
         await ai_service.get_answer([{"role": "user", "content": "Привет"}])
 
-    assert str(exc_info.value) == "Ошибка статуса."
+    assert str(exc_info.value) == "Произошла ошибка при загрузке ответа."

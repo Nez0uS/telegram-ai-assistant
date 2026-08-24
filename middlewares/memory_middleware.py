@@ -1,7 +1,9 @@
-from aiogram import BaseMiddleware
-from services import MemoryService
-from aiogram.types import TelegramObject
 from typing import Callable, Dict, Any, Awaitable
+
+from aiogram import BaseMiddleware
+from aiogram.types import TelegramObject
+
+from services import MemoryService
 
 
 class MemoryMiddleware(BaseMiddleware):

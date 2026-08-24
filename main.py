@@ -7,8 +7,8 @@ from config.logger import setup_logger
 from database import Database, MessageRepository
 from handlers import start_router, chat_router, clear_router
 from config import BOT_TOKEN
-from services import MemoryService
-from middlewares import MemoryMiddleware
+from services import MemoryService, AIService
+from middlewares import MemoryMiddleware, AIServiceMiddleware
 
 bot = Bot(token=BOT_TOKEN)
 dp = Dispatcher()
@@ -27,10 +27,14 @@ async def main():
         await database.connect()
 
         repository = MessageRepository(database.pool)
-
+        ai_service = AIService()
         memory = MemoryService(repository)
+
         memory_middleware = MemoryMiddleware(memory)
+        ai_service_middleware = AIServiceMiddleware(ai_service)
+
         dp.message.outer_middleware(memory_middleware)
+        dp.message.outer_middleware(ai_service_middleware)
 
         logger.info("Ассистент запущен!")
         await dp.start_polling(bot)

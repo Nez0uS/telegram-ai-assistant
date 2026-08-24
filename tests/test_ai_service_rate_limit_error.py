@@ -21,4 +21,4 @@ async def test_ai_service_rate_limit_error():
     with pytest.raises(AIRateLimitError) as exc_info:
         await ai_service.get_answer([{"role": "user", "content": "Привет"}])
 
-    assert str(exc_info.value) == "Ошибка лимита скорости."
+    assert str(exc_info.value) == "Слишком много запросов."
