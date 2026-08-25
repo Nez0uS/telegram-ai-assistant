@@ -8,9 +8,9 @@ class Database:
     def __init__(self):
         self.pool: asyncpg.Pool | None = None
 
-    async def connect(self):
+    async def connect(self) -> None:
         self.pool = await asyncpg.create_pool(DATABASE_URL)
 
-    async def close(self):
-        if self.pool:
+    async def close(self) -> None:
+        if self.pool is not None:
             await self.pool.close()
