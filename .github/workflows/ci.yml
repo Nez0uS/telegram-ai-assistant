@@ -20,4 +20,9 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Run tests
+        env:
+          BOT_TOKEN: test-token
+          OPENROUTER_API_KEY: test-api-key
+          MODEL_NAME: test-model
+          DATABASE_URL: postgresql://postgres:postgres@localhost:5432/test
         run: python -m pytest
