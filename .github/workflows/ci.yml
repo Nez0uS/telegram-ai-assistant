@@ -8,6 +8,12 @@ jobs:
   tests:
     runs-on: ubuntu-latest
 
+    env:
+      BOT_TOKEN: test-token
+      OPENROUTER_API_KEY: test-api-key
+      MODEL_NAME: test-model
+      DATABASE_URL: postgresql://postgres:postgres@localhost:5432/test
+
     services:
       postgres:
         image: postgres:13
@@ -17,11 +23,6 @@ jobs:
           POSTGRES_DB: test
         ports:
           - 5432:5432
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
 
     steps:
       - name: Checkout repository
@@ -32,29 +33,11 @@ jobs:
         with:
           python-version: "3.11"
 
-      - name: Cache pip dependencies
-        uses: actions/cache@v4
-        with:
-          path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
-          restore-keys: |
-            ${{ runner.os }}-pip-
-
       - name: Install dependencies
         run: pip install -r requirements.txt
 
       - name: Run migrations
-        env:
-          BOT_TOKEN: test-token
-          OPENROUTER_API_KEY: test-api-key
-          MODEL_NAME: test-model
-          DATABASE_URL: postgresql://postgres:postgres@localhost:5432/test
         run: alembic upgrade head
 
       - name: Run tests
-        env:
-          BOT_TOKEN: test-token
-          OPENROUTER_API_KEY: test-api-key
-          MODEL_NAME: test-model
-          DATABASE_URL: postgresql://postgres:postgres@localhost:5432/test
         run: python -m pytest
