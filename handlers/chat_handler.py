@@ -1,8 +1,10 @@
 import logging
 from aiogram import F, Router
 from aiogram.types import Message
+from aiogram.utils.chat_action import ChatActionSender
 
 from services import AIService, MemoryService, AIConnectionError, AIRateLimitError, AIProviderError
+
 
 logger = logging.getLogger(__name__)
 
@@ -21,7 +23,13 @@ async def chat_handler(message: Message, memory: MemoryService, ai_service: AISe
             }
         ]
 
-        answer = await ai_service.get_answer(messages)
+        async with ChatActionSender.typing(
+            bot=message.bot,
+            chat_id=message.chat.id
+        ):
+            answer = await ai_service.get_answer(
+                messages
+            )
 
         await memory.add_message(
             user_id=user_id,

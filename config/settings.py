@@ -10,6 +10,7 @@ OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")
 MODEL_NAME = os.getenv("MODEL_NAME")
 DATABASE_URL = os.getenv("DATABASE_URL")
 LOG_LEVEL = os.getenv("LOG_LEVEL", "INFO")
+MAX_HISTORY = 20
 
 if not BOT_TOKEN:
     raise ValueError("BOT_TOKEN не найден в .env")

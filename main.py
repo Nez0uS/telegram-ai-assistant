@@ -7,6 +7,7 @@ from config.logger import setup_logger
 from database import Database, MessageRepository
 from handlers import start_router, chat_router, clear_router
 from config import BOT_TOKEN
+from config.bot_commands import set_bot_commands
 from services import MemoryService, AIService
 from middlewares import MemoryMiddleware, AIServiceMiddleware
 
@@ -20,7 +21,7 @@ dp.include_router(clear_router)
 dp.include_router(chat_router)
 
 
-async def main():
+async def main() -> None:
     setup_logger()
 
     try:
@@ -35,6 +36,8 @@ async def main():
 
         dp.message.outer_middleware(memory_middleware)
         dp.message.outer_middleware(ai_service_middleware)
+
+        await set_bot_commands(bot)
 
         logger.info("Ассистент запущен!")
         await dp.start_polling(bot)
