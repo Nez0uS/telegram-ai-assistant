@@ -1,7 +1,7 @@
 from unittest.mock import AsyncMock, Mock
 import pytest
 
-from PROMPTS import PROMPT1
+from prompts.system_prompt import SYSTEM_PROMPT
 from config import MODEL_NAME
 from services import AIService
 
@@ -26,7 +26,7 @@ async def test_ai_service():
 
     ai_service.client.chat.completions.create.assert_awaited_once_with(
         messages=[
-            {"role": "system", "content": PROMPT1},
+            {"role": "system", "content": SYSTEM_PROMPT},
             {"role": "user", "content": "Привет!"}
         ],
         model=MODEL_NAME

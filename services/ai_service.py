@@ -1,6 +1,6 @@
 from openai import AsyncOpenAI, RateLimitError, APIStatusError, APIConnectionError
 
-from PROMPTS import PROMPT1
+from prompts.system_prompt import SYSTEM_PROMPT
 from config import OPENROUTER_API_KEY, MODEL_NAME
 from .exceptions import AIConnectionError, AIProviderError, AIRateLimitError
 
@@ -17,7 +17,7 @@ class AIService:
     async def get_answer(self, messages: list[dict[str, str]]) -> str:
         try:
             request_messages = [
-                {"role": "system", "content": PROMPT1}
+                {"role": "system", "content": SYSTEM_PROMPT}
             ] + messages
 
             completion = await self.client.chat.completions.create(
