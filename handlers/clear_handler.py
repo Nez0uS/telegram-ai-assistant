@@ -7,7 +7,6 @@ from aiogram.filters import Command
 
 clear_router = Router()
 
-
 @clear_router.message(Command("clear"))
 async def clear_handler(
         message: Message,
