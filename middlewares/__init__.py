@@ -4,5 +4,5 @@ from .memory_middleware import MemoryMiddleware
 
 __all__ = [
     "MemoryMiddleware",
-    "AIServiceMiddleware"
+    "AIServiceMiddleware",
 ]
