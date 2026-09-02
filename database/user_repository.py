@@ -27,3 +27,14 @@ class UserRepository:
         )
 
         return dict(user) if user else None
+
+    async def delete_user(
+            self,
+            telegram_id: int
+    ) -> None:
+        await self.pool.execute(
+            """
+            DELETE FROM users WHERE telegram_id = $1
+            """,
+            telegram_id
+        )

@@ -1,6 +1,6 @@
 import pytest
 
-from database import Database, MessageRepository
+from database import Database, MessageRepository, UserRepository
 
 
 @pytest.fixture
@@ -12,7 +12,12 @@ async def database():
 
     await database.close()
 
+
 @pytest.fixture
-async def repository(database):
+async def message_repository(database):
     return MessageRepository(database.pool)
 
+
+@pytest.fixture
+async def user_repository(database):
+    return UserRepository(database.pool)

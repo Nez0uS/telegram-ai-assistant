@@ -23,3 +23,9 @@ class UserService:
         telegram_id: int
     ) -> dict | None:
         return await self.repository.get_user(telegram_id)
+
+    async def delete_user(
+            self,
+            telegram_id: int
+    ) -> None:
+        await self.repository.delete_user(telegram_id)
