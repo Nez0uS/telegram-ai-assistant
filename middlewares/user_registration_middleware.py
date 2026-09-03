@@ -12,10 +12,10 @@ class UserRegistrationMiddleware(BaseMiddleware):
         self.user_service = user_service
 
     async def __call__(
-            self,
-            handler: Callable[[Message, Dict[str, Any]], Awaitable[Any]],
-            event: Message,
-            data: Dict[str, Any]
+        self,
+        handler: Callable[[Message, Dict[str, Any]], Awaitable[Any]],
+        event: Message,
+        data: Dict[str, Any]
     ) -> Any:
 
         telegram_id = event.from_user.id
