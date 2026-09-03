@@ -12,9 +12,9 @@ chat_router = Router()
 
 @chat_router.message(F.text & ~(F.text.startswith("/")))
 async def chat_handler(
-        message: Message,
-        memory: MemoryService,
-        ai_service: AIService
+    message: Message,
+    memory: MemoryService,
+    ai_service: AIService
 ):
     try:
         user_id = message.from_user.id

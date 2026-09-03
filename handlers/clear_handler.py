@@ -9,8 +9,8 @@ clear_router = Router()
 
 @clear_router.message(Command("clear"))
 async def clear_handler(
-        message: Message,
-        memory: MemoryService
+    message: Message,
+    memory: MemoryService
 ) -> None:
     user_id = message.from_user.id
 
