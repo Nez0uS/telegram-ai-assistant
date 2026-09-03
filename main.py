@@ -9,7 +9,12 @@ from handlers import start_router, chat_router, clear_router
 from config import BOT_TOKEN
 from config.bot_commands import set_bot_commands
 from services import MemoryService, AIService, UserService
-from middlewares import MemoryMiddleware, AIServiceMiddleware, UserServiceMiddleware
+from middlewares import (
+    MemoryMiddleware,
+    AIServiceMiddleware,
+    UserServiceMiddleware,
+    UserRegistrationMiddleware
+)
 
 
 bot = Bot(token=BOT_TOKEN)
@@ -38,10 +43,12 @@ async def main() -> None:
         memory_middleware = MemoryMiddleware(memory)
         ai_service_middleware = AIServiceMiddleware(ai_service)
         user_service_middleware = UserServiceMiddleware(user_service)
+        user_registration_middleware = UserRegistrationMiddleware(user_service)
 
+        dp.message.outer_middleware(user_registration_middleware)
+        dp.message.outer_middleware(user_service_middleware)
         dp.message.outer_middleware(memory_middleware)
         dp.message.outer_middleware(ai_service_middleware)
-        dp.message.outer_middleware(user_service_middleware)
 
         await set_bot_commands(bot)
 
