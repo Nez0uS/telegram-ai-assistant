@@ -23,6 +23,7 @@ async def test_memory_service_add_message():
         "Привет"
     )
 
+
 @pytest.mark.anyio
 async def test_memory_service_get_messages():
     repository = Mock()
@@ -41,6 +42,7 @@ async def test_memory_service_get_messages():
     assert result == [
         {"role": "user", "content": "Привет"}
     ]
+
 
 @pytest.mark.anyio
 async def test_memory_service_clear_history():

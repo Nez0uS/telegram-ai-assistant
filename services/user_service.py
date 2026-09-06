@@ -29,3 +29,6 @@ class UserService:
             telegram_id: int
     ) -> None:
         await self.repository.delete_user(telegram_id)
+
+    async def get_user_id(self, telegram_id: int):
+        pass

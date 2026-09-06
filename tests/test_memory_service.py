@@ -4,10 +4,13 @@ from services import MemoryService
 
 
 @pytest.mark.anyio
-async def test_history_limit(message_repository):
-    user_id = 123
+async def test_history_limit(message_repository, user_repository):
+    telegram_id = 111111
 
-    await message_repository.clear_history(user_id)
+    await user_repository.delete_user(telegram_id)
+    await user_repository.create_user(telegram_id, "TestUser")
+    user = await user_repository.get_user(telegram_id)
+    user_id = user["id"]
 
     memory_service = MemoryService(message_repository)
 
@@ -16,7 +19,7 @@ async def test_history_limit(message_repository):
             await memory_service.add_message(
                 user_id,
                 "user",
-                f"Привет{i}"
+                "Привет{i}".format(i=i)
             )
 
         messages = await memory_service.get_messages(user_id)
@@ -26,29 +29,42 @@ async def test_history_limit(message_repository):
         assert messages[-1]["content"] == "Привет20"
     finally:
         await memory_service.clear_history(user_id)
+        await user_repository.delete_user(telegram_id)
 
 
 @pytest.mark.anyio
-async def test_users_have_separate_history(message_repository):
-    await message_repository.clear_history(1)
-    await message_repository.clear_history(2)
+async def test_users_have_separate_history(message_repository, user_repository):
+    telegram_id_1 = 111111
+    telegram_id_2 = 222222
+
+    await user_repository.delete_user(telegram_id_1)
+    await user_repository.delete_user(telegram_id_2)
+
+    await user_repository.create_user(telegram_id_1, "TestUser")
+    await user_repository.create_user(telegram_id_2, "TestUser")
+
+    user1 = await user_repository.get_user(telegram_id_1)
+    user2 = await user_repository.get_user(telegram_id_2)
+
+    user1_id = user1["id"]
+    user2_id = user2["id"]
 
     memory_service = MemoryService(message_repository)
 
     try:
         await memory_service.add_message(
-            1,
+            user1_id,
             "user",
             "Привет от первого"
         )
         await memory_service.add_message(
-            2,
+            user2_id,
             "user",
             "Привет от второго"
         )
 
-        user_1_messages = await memory_service.get_messages(1)
-        user_2_messages = await memory_service.get_messages(2)
+        user_1_messages = await memory_service.get_messages(user1_id)
+        user_2_messages = await memory_service.get_messages(user2_id)
 
         assert user_1_messages == [
             {"role": "user", "content": "Привет от первого"}
@@ -58,15 +74,21 @@ async def test_users_have_separate_history(message_repository):
             {"role": "user", "content": "Привет от второго"}
         ]
     finally:
-        await memory_service.clear_history(1)
-        await memory_service.clear_history(2)
+        await memory_service.clear_history(user1_id)
+        await memory_service.clear_history(user2_id)
+        await user_repository.delete_user(telegram_id_1)
+        await user_repository.delete_user(telegram_id_2)
 
 
 @pytest.mark.anyio
-async def test_clear_history(message_repository):
-    user_id = 123
+async def test_clear_history(message_repository, user_repository):
+    telegram_id = 111111
 
-    await message_repository.clear_history(user_id)
+    await user_repository.delete_user(telegram_id)
+    await user_repository.create_user(telegram_id, "TestUser")
+
+    user = await user_repository.get_user(telegram_id)
+    user_id = user["id"]
 
     memory_service = MemoryService(message_repository)
 
@@ -88,3 +110,4 @@ async def test_clear_history(message_repository):
         assert messages == []
     finally:
         await memory_service.clear_history(user_id)
+        await user_repository.delete_user(telegram_id)

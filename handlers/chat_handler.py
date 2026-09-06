@@ -3,8 +3,14 @@ from aiogram import F, Router
 from aiogram.types import Message
 from aiogram.utils.chat_action import ChatActionSender
 
-from services import AIService, MemoryService, AIConnectionError, AIRateLimitError, AIProviderError
-
+from services import (
+    AIService,
+    MemoryService,
+    AIConnectionError,
+    AIRateLimitError,
+    AIProviderError,
+    UserService
+)
 
 logger = logging.getLogger(__name__)
 
@@ -14,10 +20,14 @@ chat_router = Router()
 async def chat_handler(
     message: Message,
     memory: MemoryService,
-    ai_service: AIService
+    ai_service: AIService,
+    user_service: UserService
 ):
     try:
-        user_id = message.from_user.id
+        telegram_id = message.from_user.id
+        user = await user_service.get_user(telegram_id)
+        user_id = user["id"]
+
         messages = await memory.get_messages(user_id)
         messages = [
             *messages,
