@@ -3,23 +3,21 @@ import logging
 
 from aiogram import Bot, Dispatcher
 
-from config.logger import setup_logger
-from database import Database, MessageRepository, UserRepository
-from handlers import start_router, chat_router, clear_router
 from config import BOT_TOKEN
 from config.bot_commands import set_bot_commands
-from services import MemoryService, AIService, UserService
+from config.logger import setup_logger
+from database import Database, MessageRepository, UserRepository
+from handlers import chat_router, clear_router, start_router
 from middlewares import (
-    MemoryMiddleware,
     AIServiceMiddleware,
+    MemoryMiddleware,
+    UserRegistrationMiddleware,
     UserServiceMiddleware,
-    UserRegistrationMiddleware
 )
-
+from services import AIService, MemoryService, UserService
 
 bot = Bot(token=BOT_TOKEN)
 dp = Dispatcher()
-database = Database()
 logger = logging.getLogger(__name__)
 
 dp.include_router(start_router)
@@ -30,11 +28,9 @@ dp.include_router(chat_router)
 async def main() -> None:
     setup_logger()
 
-    try:
-        await database.connect()
-
-        message_repository = MessageRepository(database.pool)
-        user_repository = UserRepository(database.pool)
+    async with Database() as database:
+        message_repository = MessageRepository(database.connection_pool)
+        user_repository = UserRepository(database.connection_pool)
 
         ai_service = AIService()
         memory = MemoryService(message_repository)
@@ -54,10 +50,6 @@ async def main() -> None:
 
         logger.info("Ассистент запущен!")
         await dp.start_polling(bot)
-
-    finally:
-        logger.info("Завершение работы...")
-        await database.close()
 
 
 if __name__ == "__main__":

@@ -1,5 +1,8 @@
+from datetime import datetime, timezone
 from unittest.mock import AsyncMock, Mock
+
 import pytest
+from aiogram.types import Chat, Message, User
 
 from middlewares import UserRegistrationMiddleware
 
@@ -11,9 +14,21 @@ async def test_user_registration_middleware():
 
     middleware = UserRegistrationMiddleware(user_service)
 
-    event = Mock()
-    event.from_user.id = 12345
-    event.from_user.first_name = "Name"
+    user = User(
+        id=12345,
+        is_bot=False,
+        first_name="Name",
+        last_name=None,
+        username=None,
+        language_code=None,
+    )
+
+    event = Message(
+        message_id=1,
+        date=datetime.now(timezone.utc),
+        chat=Chat(id=1, type="private"),
+        from_user=user,
+    )
 
     handler = AsyncMock()
     data = {}

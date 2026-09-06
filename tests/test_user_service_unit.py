@@ -1,4 +1,5 @@
 from unittest.mock import AsyncMock, Mock
+
 import pytest
 
 from services import UserService
@@ -19,10 +20,7 @@ async def test_register_user_creates_new_user():
     await user_service.register_user(telegram_id, name)
 
     repository.get_user.assert_awaited_once_with(telegram_id)
-    repository.create_user.assert_awaited_once_with(
-        telegram_id,
-        name
-    )
+    repository.create_user.assert_awaited_once_with(telegram_id, name)
 
 
 @pytest.mark.anyio
@@ -32,10 +30,7 @@ async def test_register_user_does_not_create_existing_user():
 
     repository = Mock()
     repository.get_user = AsyncMock(
-        return_value={
-            "telegram_id": telegram_id,
-            "name": name
-        }
+        return_value={"telegram_id": telegram_id, "name": name}
     )
 
     repository.create_user = AsyncMock()
@@ -52,15 +47,10 @@ async def test_get_user_returns_user():
     telegram_id = 123456
     name = "name"
 
-    expected_user = {
-        "telegram_id": telegram_id,
-        "name": name
-    }
+    expected_user = {"telegram_id": telegram_id, "name": name}
 
     repository = Mock()
-    repository.get_user = AsyncMock(
-        return_value=expected_user
-    )
+    repository.get_user = AsyncMock(return_value=expected_user)
 
     user_service = UserService(repository)
 

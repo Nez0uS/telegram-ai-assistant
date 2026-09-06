@@ -16,11 +16,7 @@ async def test_history_limit(message_repository, user_repository):
 
     try:
         for i in range(21):
-            await memory_service.add_message(
-                user_id,
-                "user",
-                "Привет{i}".format(i=i)
-            )
+            await memory_service.add_message(user_id, "user", f"Привет{i}")
 
         messages = await memory_service.get_messages(user_id)
 
@@ -52,27 +48,15 @@ async def test_users_have_separate_history(message_repository, user_repository):
     memory_service = MemoryService(message_repository)
 
     try:
-        await memory_service.add_message(
-            user1_id,
-            "user",
-            "Привет от первого"
-        )
-        await memory_service.add_message(
-            user2_id,
-            "user",
-            "Привет от второго"
-        )
+        await memory_service.add_message(user1_id, "user", "Привет от первого")
+        await memory_service.add_message(user2_id, "user", "Привет от второго")
 
         user_1_messages = await memory_service.get_messages(user1_id)
         user_2_messages = await memory_service.get_messages(user2_id)
 
-        assert user_1_messages == [
-            {"role": "user", "content": "Привет от первого"}
-        ]
+        assert user_1_messages == [{"role": "user", "content": "Привет от первого"}]
 
-        assert user_2_messages == [
-            {"role": "user", "content": "Привет от второго"}
-        ]
+        assert user_2_messages == [{"role": "user", "content": "Привет от второго"}]
     finally:
         await memory_service.clear_history(user1_id)
         await memory_service.clear_history(user2_id)
@@ -93,16 +77,8 @@ async def test_clear_history(message_repository, user_repository):
     memory_service = MemoryService(message_repository)
 
     try:
-        await memory_service.add_message(
-            user_id,
-            "user",
-            "Привет"
-        )
-        await memory_service.add_message(
-            user_id,
-            "assistant",
-            "Здравствуйте!"
-        )
+        await memory_service.add_message(user_id, "user", "Привет")
+        await memory_service.add_message(user_id, "assistant", "Здравствуйте!")
 
         await memory_service.clear_history(user_id)
         messages = await memory_service.get_messages(user_id)

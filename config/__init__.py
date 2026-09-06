@@ -1,10 +1,15 @@
-from .settings import BOT_TOKEN, OPENROUTER_API_KEY, MODEL_NAME, DATABASE_URL, MAX_HISTORY
-
+from .settings import (
+    BOT_TOKEN,
+    DATABASE_URL,
+    MAX_HISTORY,
+    MODEL_NAME,
+    OPENROUTER_API_KEY,
+)
 
 __all__ = [
     "BOT_TOKEN",
-    "OPENROUTER_API_KEY",
-    "MODEL_NAME",
     "DATABASE_URL",
-    "MAX_HISTORY"
+    "MAX_HISTORY",
+    "MODEL_NAME",
+    "OPENROUTER_API_KEY",
 ]

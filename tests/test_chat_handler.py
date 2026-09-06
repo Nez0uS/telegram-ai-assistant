@@ -1,4 +1,5 @@
 from unittest.mock import AsyncMock, Mock
+
 import pytest
 
 from handlers import chat_handler
@@ -15,24 +16,15 @@ async def test_chat_handler():
     message.answer = AsyncMock()
 
     user_service = Mock()
-    user_service.get_user = AsyncMock(
-        return_value={
-            "id": 22,
-            "telegram_id": 123
-        }
-    )
+    user_service.get_user = AsyncMock(return_value={"id": 22, "telegram_id": 123})
 
     memory.get_messages = AsyncMock(
-        return_value=[
-            {"role": "user", "content": "Привет"}
-        ]
+        return_value=[{"role": "user", "content": "Привет"}]
     )
 
     memory.add_message = AsyncMock()
 
-    ai_service.get_answer = AsyncMock(
-        return_value="Хорошо! У меня всё отлично."
-    )
+    ai_service.get_answer = AsyncMock(return_value="Хорошо! У меня всё отлично.")
 
     await chat_handler.chat_handler(message, memory, ai_service, user_service)
 
@@ -41,24 +33,16 @@ async def test_chat_handler():
     ai_service.get_answer.assert_awaited_once_with(
         [
             {"role": "user", "content": "Привет"},
-            {"role": "user", "content": "Как дела?"}
+            {"role": "user", "content": "Как дела?"},
         ]
     )
 
-    memory.add_message.assert_any_await(
-        user_id=22,
-        role="user",
-        content="Как дела?"
-    )
+    memory.add_message.assert_any_await(user_id=22, role="user", content="Как дела?")
 
     memory.add_message.assert_any_await(
-        user_id=22,
-        role="assistant",
-        content="Хорошо! У меня всё отлично."
+        user_id=22, role="assistant", content="Хорошо! У меня всё отлично."
     )
 
-    message.answer.assert_awaited_once_with(
-        "Хорошо! У меня всё отлично."
-    )
+    message.answer.assert_awaited_once_with("Хорошо! У меня всё отлично.")
 
     user_service.get_user.assert_awaited_once_with(123)

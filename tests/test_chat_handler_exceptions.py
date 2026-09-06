@@ -1,8 +1,9 @@
-from unittest.mock import Mock, AsyncMock
+from unittest.mock import AsyncMock, Mock
+
 import pytest
-from services import AIConnectionError, AIRateLimitError, AIProviderError
 
 from handlers import chat_handler
+from services import AIConnectionError, AIProviderError, AIRateLimitError
 
 
 @pytest.mark.anyio
@@ -12,21 +13,14 @@ async def test_chat_handler_connection_error():
     ai_service = Mock()
     user_service = AsyncMock()
 
-    user_service.get_user = AsyncMock(
-        return_value={
-            "id": 22,
-            "telegram_id": 123
-        }
-    )
+    user_service.get_user = AsyncMock(return_value={"id": 22, "telegram_id": 123})
 
     message.from_user.id = 123
     message.text = "Как дела?"
     message.answer = AsyncMock()
 
     memory.get_messages = AsyncMock(
-        return_value=[
-            {"role": "user", "content": "Привет"}
-        ]
+        return_value=[{"role": "user", "content": "Привет"}]
     )
 
     memory.add_message = AsyncMock()
@@ -36,9 +30,7 @@ async def test_chat_handler_connection_error():
     await chat_handler.chat_handler(message, memory, ai_service, user_service)
     memory.add_message.assert_not_awaited()
 
-    message.answer.assert_awaited_once_with(
-        "Нет соединения с AI."
-    )
+    message.answer.assert_awaited_once_with("Нет соединения с AI.")
 
     user_service.get_user.assert_awaited_once_with(123)
 
@@ -54,17 +46,10 @@ async def test_chat_handler_rate_limit_error():
     message.answer = AsyncMock()
     user_service = AsyncMock()
 
-    user_service.get_user = AsyncMock(
-        return_value={
-            "id": 22,
-            "telegram_id": 123
-        }
-    )
+    user_service.get_user = AsyncMock(return_value={"id": 22, "telegram_id": 123})
 
     memory.get_messages = AsyncMock(
-        return_value=[
-            {"role": "user", "content": "Привет"}
-        ]
+        return_value=[{"role": "user", "content": "Привет"}]
     )
 
     memory.add_message = AsyncMock()
@@ -74,9 +59,7 @@ async def test_chat_handler_rate_limit_error():
     await chat_handler.chat_handler(message, memory, ai_service, user_service)
     memory.add_message.assert_not_awaited()
 
-    message.answer.assert_awaited_once_with(
-        "Слишком много запросов."
-    )
+    message.answer.assert_awaited_once_with("Слишком много запросов.")
 
     user_service.get_user.assert_awaited_once_with(123)
 
@@ -92,17 +75,10 @@ async def test_chat_handler_provider_error():
     message.text = "Как дела?"
     message.answer = AsyncMock()
 
-    user_service.get_user = AsyncMock(
-        return_value={
-            "id": 22,
-            "telegram_id": 123
-        }
-    )
+    user_service.get_user = AsyncMock(return_value={"id": 22, "telegram_id": 123})
 
     memory.get_messages = AsyncMock(
-        return_value=[
-            {"role": "user", "content": "Привет"}
-        ]
+        return_value=[{"role": "user", "content": "Привет"}]
     )
 
     memory.add_message = AsyncMock()
@@ -112,8 +88,6 @@ async def test_chat_handler_provider_error():
     await chat_handler.chat_handler(message, memory, ai_service, user_service)
     memory.add_message.assert_not_awaited()
 
-    message.answer.assert_awaited_once_with(
-        "Произошла ошибка при загрузке ответа."
-    )
+    message.answer.assert_awaited_once_with("Произошла ошибка при загрузке ответа.")
 
     user_service.get_user.assert_awaited_once_with(123)

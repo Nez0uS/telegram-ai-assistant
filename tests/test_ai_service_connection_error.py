@@ -1,8 +1,9 @@
 from unittest.mock import AsyncMock, Mock
+
 import pytest
 from openai import APIConnectionError
 
-from services import AIService, AIConnectionError
+from services import AIConnectionError, AIService
 
 
 @pytest.mark.anyio
@@ -12,8 +13,7 @@ async def test_ai_service_connection_error():
 
     ai_service.client.chat.completions.create = AsyncMock(
         side_effect=APIConnectionError(
-            message="Connection error.",
-            request=mock_request
+            message="Connection error.", request=mock_request
         )
     )
 

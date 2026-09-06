@@ -1,24 +1,21 @@
-from openai import AsyncOpenAI, RateLimitError, APIStatusError, APIConnectionError
+from openai import APIConnectionError, APIStatusError, AsyncOpenAI, RateLimitError
 
+from config import MODEL_NAME, OPENROUTER_API_KEY
 from prompts.system_prompt import SYSTEM_PROMPT
-from config import OPENROUTER_API_KEY, MODEL_NAME
+
 from .exceptions import AIConnectionError, AIProviderError, AIRateLimitError
 
 
 class AIService:
-
     def __init__(self):
         self.client = AsyncOpenAI(
-            base_url="https://openrouter.ai/api/v1",
-            api_key=OPENROUTER_API_KEY
+            base_url="https://openrouter.ai/api/v1", api_key=OPENROUTER_API_KEY
         )
         self.model = MODEL_NAME
 
     async def get_answer(self, messages: list[dict[str, str]]) -> str:
         try:
-            request_messages = [
-                {"role": "system", "content": SYSTEM_PROMPT}
-            ] + messages
+            request_messages = [{"role": "system", "content": SYSTEM_PROMPT}] + messages
 
             completion = await self.client.chat.completions.create(
                 messages=request_messages,

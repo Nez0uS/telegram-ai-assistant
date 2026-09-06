@@ -1,4 +1,5 @@
 from unittest.mock import AsyncMock, Mock
+
 import pytest
 
 from middlewares import AIServiceMiddleware

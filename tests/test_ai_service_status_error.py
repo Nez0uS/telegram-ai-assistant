@@ -1,8 +1,9 @@
 from unittest.mock import AsyncMock, Mock
+
 import pytest
 from openai import APIStatusError
 
-from services import AIService, AIProviderError
+from services import AIProviderError, AIService
 
 
 @pytest.mark.anyio
@@ -12,9 +13,7 @@ async def test_ai_service_status_error():
 
     ai_service.client.chat.completions.create = AsyncMock(
         side_effect=APIStatusError(
-            message="Ошибка статуса.",
-            response=mock_response,
-            body=None
+            message="Ошибка статуса.", response=mock_response, body=None
         )
     )
 
