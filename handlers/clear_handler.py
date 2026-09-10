@@ -17,13 +17,10 @@ async def clear_handler(
 
     telegram_id = message.from_user.id
 
-    user = await user_service.get_user(telegram_id)
-
-    if user is None:
+    user_id = await user_service.get_user_id(telegram_id)
+    if user_id is None:
         await message.answer("Пользователь не найден!")
         return
-
-    user_id = user["id"]
 
     await memory.clear_history(user_id)
     await message.answer("История успешно удалена!")

@@ -13,7 +13,7 @@ async def test_chat_handler_connection_error():
     ai_service = Mock()
     user_service = AsyncMock()
 
-    user_service.get_user = AsyncMock(return_value={"id": 22, "telegram_id": 123})
+    user_service.get_user_id = AsyncMock(return_value=22)
 
     message.from_user.id = 123
     message.text = "Как дела?"
@@ -32,7 +32,7 @@ async def test_chat_handler_connection_error():
 
     message.answer.assert_awaited_once_with("Нет соединения с AI.")
 
-    user_service.get_user.assert_awaited_once_with(123)
+    user_service.get_user_id.assert_awaited_once_with(123)
 
 
 @pytest.mark.anyio
@@ -46,7 +46,7 @@ async def test_chat_handler_rate_limit_error():
     message.answer = AsyncMock()
     user_service = AsyncMock()
 
-    user_service.get_user = AsyncMock(return_value={"id": 22, "telegram_id": 123})
+    user_service.get_user_id = AsyncMock(return_value=22)
 
     memory.get_messages = AsyncMock(
         return_value=[{"role": "user", "content": "Привет"}]
@@ -61,7 +61,7 @@ async def test_chat_handler_rate_limit_error():
 
     message.answer.assert_awaited_once_with("Слишком много запросов.")
 
-    user_service.get_user.assert_awaited_once_with(123)
+    user_service.get_user_id.assert_awaited_once_with(123)
 
 
 @pytest.mark.anyio
@@ -75,7 +75,7 @@ async def test_chat_handler_provider_error():
     message.text = "Как дела?"
     message.answer = AsyncMock()
 
-    user_service.get_user = AsyncMock(return_value={"id": 22, "telegram_id": 123})
+    user_service.get_user_id = AsyncMock(return_value=22)
 
     memory.get_messages = AsyncMock(
         return_value=[{"role": "user", "content": "Привет"}]
@@ -90,4 +90,4 @@ async def test_chat_handler_provider_error():
 
     message.answer.assert_awaited_once_with("Произошла ошибка при загрузке ответа.")
 
-    user_service.get_user.assert_awaited_once_with(123)
+    user_service.get_user_id.assert_awaited_once_with(123)

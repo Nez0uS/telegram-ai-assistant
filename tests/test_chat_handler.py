@@ -16,7 +16,7 @@ async def test_chat_handler():
     message.answer = AsyncMock()
 
     user_service = Mock()
-    user_service.get_user = AsyncMock(return_value={"id": 22, "telegram_id": 123})
+    user_service.get_user_id = AsyncMock(return_value=22)
 
     memory.get_messages = AsyncMock(
         return_value=[{"role": "user", "content": "Привет"}]
@@ -45,4 +45,4 @@ async def test_chat_handler():
 
     message.answer.assert_awaited_once_with("Хорошо! У меня всё отлично.")
 
-    user_service.get_user.assert_awaited_once_with(123)
+    user_service.get_user_id.assert_awaited_once_with(123)
