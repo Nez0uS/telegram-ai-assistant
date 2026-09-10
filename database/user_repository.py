@@ -1,28 +1,16 @@
-class UserRepository:
+from database import BaseRepository
+
+
+class UserRepository(BaseRepository):
     def __init__(self, pool):
-        self.pool = pool
+        super().__init__(pool, "users")
 
     async def create_user(self, telegram_id: int, name: str) -> None:
-        await self.pool.execute(
-            """
-            INSERT INTO users (telegram_id, name)
-            VALUES ($1, $2)
-            """,
-            telegram_id,
-            name,
-        )
+        await self.create(telegram_id=telegram_id, name=name)
 
     async def get_user(self, telegram_id: int) -> dict | None:
-        user = await self.pool.fetchrow(
-            "SELECT * FROM users WHERE telegram_id = $1", telegram_id
-        )
-
+        user = await self.get(telegram_id=telegram_id)
         return dict(user) if user else None
 
     async def delete_user(self, telegram_id: int) -> None:
-        await self.pool.execute(
-            """
-            DELETE FROM users WHERE telegram_id = $1
-            """,
-            telegram_id,
-        )
+        await self.delete(telegram_id=telegram_id)

@@ -7,10 +7,10 @@ class MemoryService:
         self.repository = repository
 
     async def add_message(self, user_id: int, role: str, content: str) -> None:
-        await self.repository.insert_message(user_id, role, content)
+        await self.repository.create_message(user_id, role, content)
 
     async def get_messages(self, user_id: int) -> list[dict[str, str]]:
         return await self.repository.get_messages(user_id, MAX_HISTORY)
 
     async def clear_history(self, user_id: int) -> None:
-        await self.repository.clear_history(user_id)
+        await self.repository.delete_messages(user_id)
