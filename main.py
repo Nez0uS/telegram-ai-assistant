@@ -7,7 +7,7 @@ from config import BOT_TOKEN
 from config.bot_commands import set_bot_commands
 from config.logger import setup_logger
 from database import Database, MessageRepository, UserRepository
-from handlers import chat_router, clear_router, start_router
+from handlers import chat_router, clear_router, help_router, start_router
 from middlewares import (
     AIServiceMiddleware,
     MemoryMiddleware,
@@ -21,6 +21,7 @@ dp = Dispatcher()
 logger = logging.getLogger(__name__)
 
 dp.include_router(start_router)
+dp.include_router(help_router)
 dp.include_router(clear_router)
 dp.include_router(chat_router)
 
