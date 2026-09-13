@@ -24,6 +24,9 @@ class AIService:
 
             content = completion.choices[0].message.content
 
+            if content is None:
+                raise AIProviderError("AI не вернул ответ.")
+
             return content
 
         except RateLimitError as error:

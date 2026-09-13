@@ -7,14 +7,22 @@ services:
       POSTGRES_DB: ai_assistant
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres -d ai_assistant" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
   bot:
     build: .
-    command: python main.py
+    command: sh -c "alembic upgrade head && python main.py"
     env_file:
       - .env
     environment:
       DATABASE_URL: postgresql://postgres:postgres@postgres:5432/ai_assistant
+    depends_on:
+      postgres:
+        condition: service_healthy
 
 volumes:
   postgres_data:
