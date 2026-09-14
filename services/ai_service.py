@@ -7,13 +7,20 @@ from .exceptions import AIConnectionError, AIProviderError, AIRateLimitError
 
 
 class AIService:
-    def __init__(self):
+    """
+    AI service for interacting with the OpenRouter API.
+
+    Methods:
+    - get_answer: Get an answer from the AI.
+    """
+    def __init__(self) -> None:
         self.client = AsyncOpenAI(
             base_url="https://openrouter.ai/api/v1", api_key=OPENROUTER_API_KEY
         )
         self.model = MODEL_NAME
 
     async def get_answer(self, messages: list[dict[str, str]]) -> str:
+        """Generate an AI response based on the conversation history"""
         try:
             request_messages = [{"role": "system", "content": SYSTEM_PROMPT}] + messages
 

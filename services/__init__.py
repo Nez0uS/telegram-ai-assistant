@@ -5,7 +5,7 @@ from .exceptions import (
     AIRateLimitError,
     AIServiceError,
 )
-from .memory_service import MemoryService
+from .message_service import MessageService
 from .user_service import UserService
 
 __all__ = [
@@ -14,6 +14,6 @@ __all__ = [
     "AIRateLimitError",
     "AIService",
     "AIServiceError",
-    "MemoryService",
+    "MessageService",
     "UserService",
 ]
