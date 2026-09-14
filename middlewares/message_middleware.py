@@ -8,7 +8,8 @@ from services import MessageService
 
 
 class MemoryMiddleware(BaseMiddleware):
-    def __init__(self, memory: MessageService):
+    """Middleware that provides MessageService to handlers"""
+    def __init__(self, memory: MessageService) -> None:
         self.memory = memory
 
     async def __call__(
@@ -17,6 +18,7 @@ class MemoryMiddleware(BaseMiddleware):
         event: TelegramObject,
         data: dict[str, Any],
     ) -> Any:
+        """Inject MessageService into handler data"""
         data["memory"] = self.memory
 
         return await handler(event, data)

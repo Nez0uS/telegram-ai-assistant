@@ -8,7 +8,8 @@ from services import UserService
 
 
 class UserServiceMiddleware(BaseMiddleware):
-    def __init__(self, user_service: UserService):
+    """Middleware that provides UserService to handlers"""
+    def __init__(self, user_service: UserService) -> None:
         self.user_service = user_service
 
     async def __call__(
@@ -17,6 +18,7 @@ class UserServiceMiddleware(BaseMiddleware):
         event: TelegramObject,
         data: dict[str, Any],
     ) -> Any:
+        """Inject UserService into handler data"""
         data["user_service"] = self.user_service
 
         return await handler(event, data)

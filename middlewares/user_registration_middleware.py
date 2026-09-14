@@ -8,6 +8,7 @@ from services import UserService
 
 
 class UserRegistrationMiddleware(BaseMiddleware):
+    """Middleware that registers Telegram users in the database"""
     def __init__(self, user_service: UserService) -> None:
         self.user_service = user_service
 
@@ -17,7 +18,7 @@ class UserRegistrationMiddleware(BaseMiddleware):
         event: TelegramObject,
         data: dict[str, Any],
     ) -> Any:
-
+        """Register the user before passing the event to the handler."""
         if not isinstance(event, Message):
             return await handler(event, data)
 

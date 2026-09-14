@@ -8,7 +8,8 @@ from services import AIService
 
 
 class AIServiceMiddleware(BaseMiddleware):
-    def __init__(self, ai_service: AIService):
+    """Middleware that provides AIService to handlers"""
+    def __init__(self, ai_service: AIService) -> None:
         self.ai_service = ai_service
 
     async def __call__(
@@ -17,6 +18,7 @@ class AIServiceMiddleware(BaseMiddleware):
         event: TelegramObject,
         data: dict[str, Any],
     ) -> Any:
+        """Inject AIService into handler data"""
         data["ai_service"] = self.ai_service
 
         return await handler(event, data)
