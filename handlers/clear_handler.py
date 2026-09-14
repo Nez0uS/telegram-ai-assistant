@@ -11,7 +11,7 @@ clear_router = Router()
 async def clear_handler(
     message: Message, memory: MemoryService, user_service: UserService
 ) -> None:
-
+    """Clear the user's message history"""
     if message.from_user is None:
         return
 

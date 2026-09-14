@@ -24,7 +24,8 @@ async def chat_handler(
     memory: MemoryService,
     ai_service: AIService,
     user_service: UserService,
-):
+) -> None:
+    """Handle user messages and generate AI responses"""
     try:
         if message.from_user is None:
             return

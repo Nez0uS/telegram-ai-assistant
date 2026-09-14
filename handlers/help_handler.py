@@ -7,6 +7,7 @@ help_router = Router()
 
 @help_router.message(Command("help"))
 async def help_handler(message: Message) -> None:
+    """Handle the /help command"""
     await message.answer(
         "Доступные команды:\n\n"
         "/start — запустить бота\n"

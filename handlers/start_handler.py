@@ -7,5 +7,5 @@ start_router = Router()
 
 @start_router.message(Command("start"))
 async def start_handler(message: Message) -> None:
-
+    """Handle the /start command"""
     await message.answer("Привет! Я AI-ассистент.")
