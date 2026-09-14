@@ -7,8 +7,9 @@ from aiogram.types import TelegramObject
 from services import MessageService
 
 
-class MemoryMiddleware(BaseMiddleware):
+class MessageMiddleware(BaseMiddleware):
     """Middleware that provides MessageService to handlers"""
+
     def __init__(self, memory: MessageService) -> None:
         self.memory = memory
 

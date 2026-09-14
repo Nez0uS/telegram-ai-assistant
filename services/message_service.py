@@ -13,6 +13,7 @@ class MessageService:
         get_messages: Get all messages from the database.
         clear_history: clear all messages from the database.
     """
+
     def __init__(self, repository: MessageRepository) -> None:
         self.repository = repository
 

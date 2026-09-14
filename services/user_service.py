@@ -13,6 +13,7 @@ class UserService:
         delete_user: Delete a user from the database.
         get_user_id: Get the user ID from the database.
     """
+
     def __init__(self, repository: UserRepository) -> None:
         self.repository = repository
 

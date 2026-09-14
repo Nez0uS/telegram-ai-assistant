@@ -5,6 +5,7 @@ from database import BaseRepository
 
 class UserRepository(BaseRepository):
     """User repository for operations on the users table"""
+
     def __init__(self, pool: asyncpg.Pool) -> None:
         super().__init__(pool, "users")
 

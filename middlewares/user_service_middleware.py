@@ -9,6 +9,7 @@ from services import UserService
 
 class UserServiceMiddleware(BaseMiddleware):
     """Middleware that provides UserService to handlers"""
+
     def __init__(self, user_service: UserService) -> None:
         self.user_service = user_service
 

@@ -9,7 +9,7 @@ from services import (
     AIProviderError,
     AIRateLimitError,
     AIService,
-    MemoryService,
+    MessageService,
     UserService,
 )
 
@@ -21,7 +21,7 @@ chat_router = Router()
 @chat_router.message(F.text & ~(F.text.startswith("/")))
 async def chat_handler(
     message: Message,
-    memory: MemoryService,
+    memory: MessageService,
     ai_service: AIService,
     user_service: UserService,
 ) -> None:

@@ -2,14 +2,14 @@ from aiogram import Router
 from aiogram.filters import Command
 from aiogram.types import Message
 
-from services import MemoryService, UserService
+from services import MessageService, UserService
 
 clear_router = Router()
 
 
 @clear_router.message(Command("clear"))
 async def clear_handler(
-    message: Message, memory: MemoryService, user_service: UserService
+    message: Message, memory: MessageService, user_service: UserService
 ) -> None:
     """Clear the user's message history"""
     if message.from_user is None:

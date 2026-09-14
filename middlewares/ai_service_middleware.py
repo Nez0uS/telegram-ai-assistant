@@ -9,6 +9,7 @@ from services import AIService
 
 class AIServiceMiddleware(BaseMiddleware):
     """Middleware that provides AIService to handlers"""
+
     def __init__(self, ai_service: AIService) -> None:
         self.ai_service = ai_service
 

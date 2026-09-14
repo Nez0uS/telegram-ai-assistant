@@ -10,11 +10,11 @@ from database import Database, MessageRepository, UserRepository
 from handlers import chat_router, clear_router, help_router, start_router
 from middlewares import (
     AIServiceMiddleware,
-    MemoryMiddleware,
+    MessageMiddleware,
     UserRegistrationMiddleware,
     UserServiceMiddleware,
 )
-from services import AIService, MemoryService, UserService
+from services import AIService, MessageService, UserService
 
 bot = Bot(token=BOT_TOKEN)
 dp = Dispatcher()
@@ -34,10 +34,10 @@ async def main() -> None:
         user_repository = UserRepository(database.connection_pool)
 
         ai_service = AIService()
-        memory = MemoryService(message_repository)
+        memory = MessageService(message_repository)
         user_service = UserService(user_repository)
 
-        memory_middleware = MemoryMiddleware(memory)
+        memory_middleware = MessageMiddleware(memory)
         ai_service_middleware = AIServiceMiddleware(ai_service)
         user_service_middleware = UserServiceMiddleware(user_service)
         user_registration_middleware = UserRegistrationMiddleware(user_service)

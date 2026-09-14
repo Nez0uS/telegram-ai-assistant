@@ -9,6 +9,7 @@ from services import UserService
 
 class UserRegistrationMiddleware(BaseMiddleware):
     """Middleware that registers Telegram users in the database"""
+
     def __init__(self, user_service: UserService) -> None:
         self.user_service = user_service
 

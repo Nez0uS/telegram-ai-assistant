@@ -7,6 +7,7 @@ from config import DATABASE_URL
 
 class Database:
     """Manage the PostgreSQL connection pool."""
+
     def __init__(self) -> None:
         self.pool: asyncpg.Pool | None = None
 

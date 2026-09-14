@@ -5,6 +5,7 @@ from database import BaseRepository
 
 class MessageRepository(BaseRepository):
     """Message repository for operations on the messages table"""
+
     def __init__(self, pool: asyncpg.Pool) -> None:
         super().__init__(pool, "messages")
 

@@ -17,6 +17,7 @@ class BaseRepository:
     - update: Update an existing record.
     - delete: Delete an existing record.
     """
+
     def __init__(self, pool: asyncpg.Pool, table_name: str) -> None:
         self.pool = pool
         self.table_name = table_name

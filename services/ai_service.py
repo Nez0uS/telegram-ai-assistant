@@ -1,4 +1,7 @@
+from typing import cast
+
 from openai import APIConnectionError, APIStatusError, AsyncOpenAI, RateLimitError
+from openai.types.chat import ChatCompletionMessageParam
 
 from config import MODEL_NAME, OPENROUTER_API_KEY
 from prompts.system_prompt import SYSTEM_PROMPT
@@ -13,6 +16,7 @@ class AIService:
     Methods:
     - get_answer: Get an answer from the AI.
     """
+
     def __init__(self) -> None:
         self.client = AsyncOpenAI(
             base_url="https://openrouter.ai/api/v1", api_key=OPENROUTER_API_KEY
@@ -22,7 +26,10 @@ class AIService:
     async def get_answer(self, messages: list[dict[str, str]]) -> str:
         """Generate an AI response based on the conversation history"""
         try:
-            request_messages = [{"role": "system", "content": SYSTEM_PROMPT}] + messages
+            request_messages = cast(
+                list[ChatCompletionMessageParam],
+                [{"role": "system", "content": SYSTEM_PROMPT}] + messages,
+            )
 
             completion = await self.client.chat.completions.create(
                 messages=request_messages,
