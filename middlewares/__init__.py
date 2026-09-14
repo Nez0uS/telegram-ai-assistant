@@ -1,5 +1,5 @@
 from .ai_service_middleware import AIServiceMiddleware
-from .memory_middleware import MemoryMiddleware
+from .message_middleware import MemoryMiddleware
 from .user_registration_middleware import UserRegistrationMiddleware
 from .user_service_middleware import UserServiceMiddleware
 

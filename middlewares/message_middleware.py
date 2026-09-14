@@ -4,11 +4,11 @@ from typing import Any
 from aiogram import BaseMiddleware
 from aiogram.types import TelegramObject
 
-from services import MemoryService
+from services import MessageService
 
 
 class MemoryMiddleware(BaseMiddleware):
-    def __init__(self, memory: MemoryService):
+    def __init__(self, memory: MessageService):
         self.memory = memory
 
     async def __call__(
