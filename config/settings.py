@@ -6,6 +6,18 @@ load_dotenv()
 
 
 def get_required_env(name: str) -> str:
+    """
+    Get an environment variable.
+
+    Args:
+        name: environment variable name.
+
+    Returns:
+        environment variable name.
+
+    Raises:
+        ValueError: if the variable is missing or empty.
+    """
     value = os.getenv(name)
 
     if not value:
