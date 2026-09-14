@@ -4,11 +4,31 @@ import asyncpg
 
 
 class BaseRepository:
+    """
+    Base repository for common database operations.
+
+    :param pool: asyncpg connection pool.
+    :param table_name: name of the database table.
+
+    Methods:
+    - create: Create a new record.
+    - get: Retrieve data from the database.
+    - get_all: Retrieve all data from the database.
+    - update: Update an existing record.
+    - delete: Delete an existing record.
+    """
     def __init__(self, pool: asyncpg.Pool, table_name: str) -> None:
         self.pool = pool
         self.table_name = table_name
 
     async def create(self, **kwargs: Any) -> asyncpg.Record | None:
+        """
+        Create a new record.
+
+        :param kwargs: Record fields and their values.
+
+        :return: The created record.
+        """
         if not kwargs:
             raise ValueError("No fields provided")
 
@@ -23,6 +43,13 @@ class BaseRepository:
         return await self.pool.fetchrow(query, *values)
 
     async def get(self, **kwargs: Any) -> asyncpg.Record | None:
+        """
+        Retrieve a single record from the database.
+
+        :param kwargs: Fields and values used to find the record.
+
+        :return: The retrieved record, or None if no record was found.
+        """
         if not kwargs:
             raise ValueError("No fields provided")
 
@@ -43,7 +70,13 @@ class BaseRepository:
         return await self.pool.fetchrow(query, *values)
 
     async def get_all(self, **kwargs: Any) -> list[asyncpg.Record]:
+        """
+        Retrieve all records matching the given fields and values.
 
+        :param kwargs: Fields and values used to filter records.
+
+        :return: A list of retrieved records.
+        """
         conditions = []
         values = list(kwargs.values())
 
@@ -68,6 +101,14 @@ class BaseRepository:
     async def update(
         self, filters: dict[str, Any], **kwargs: Any
     ) -> asyncpg.Record | None:
+        """
+        Update an existing record based on the given filters.
+
+        :param filters: Fields and values used to find the record.
+        :param kwargs: Fields and values to update.
+
+        :return: The updated record, or None if no record was found.
+        """
         if not filters:
             raise ValueError("No fields provided")
 
@@ -101,6 +142,13 @@ class BaseRepository:
         return await self.pool.fetchrow(query, *values)
 
     async def delete(self, **kwargs: Any) -> asyncpg.Record | None:
+        """
+        Delete a record from the database.
+
+        :param kwargs: Fields and values used to find the record.
+
+        :return: The deleted record, or None if no record was found.
+        """
         if not kwargs:
             raise ValueError("No fields provided")
 
